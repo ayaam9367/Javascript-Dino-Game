@@ -1,121 +1,124 @@
 console.log("Welcome to Dino Game!");
 score = 0;
 cross = true;
+var gameStarted = false;
+var restart = document.querySelector('.restart');
 
-audiogo = new Audio('gameover.mp3');
-audio = new Audio ('music.mp3');
+audiogo = new Audio("gameover.mp3");
+audio = new Audio("music.mp3");
 
-setTimeout(() => {
+/*
+remove welcome!
+remove press any key to start
+start animation of obstacle
+start music
+ */
+
+// setTimeout(() => {
+//     //audio.play();
+// }, 1000)
+
+start = document.querySelector(".start");
+
+//start function
+
+document.onkeydown = function (e) {
+  if (!gameStarted) {
+    console.log("start");
     audio.play();
-}, 1000)
-
-document.onkeydown = function(e){
-    console.log("key is: ",  e.key)
+    obstacle.classList.add("animateObstacle");
+    gameOver.innerHTML = "";
+    start.innerHTML = "";
+    gameStarted = true;
+  } else {
+    console.log("key is: ", e.key);
     console.log("key code is: ", e.keyCode);
-    if(e.key == "ArrowUp"){
-        dino = document.querySelector('.dino');
-        dino.classList.add('animateDino');
-        setTimeout(() => {
-            dino.classList.remove('animateDino');
-        }, 700);
+    if (e.key == "ArrowUp") {
+      dino = document.querySelector(".dino");
+      dino.classList.add("animateDino");
+      setTimeout(() => {
+        dino.classList.remove("animateDino");
+      }, 700);
     }
-    if(e.key == "ArrowRight"){
-        dino = document.querySelector('.dino');
-        dinoX = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
-        dino.style.left = (dinoX + 112) + "px";
+    if (e.key == "ArrowRight") {
+      dino = document.querySelector(".dino");
+      dinoX = parseInt(
+        window.getComputedStyle(dino, null).getPropertyValue("left")
+      );
+      dino.style.left = dinoX + 112 + "px";
     }
 
-    if(e.key === "ArrowLeft"){
-        dino = document.querySelector('.dino');
-        dinoX = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
-        dino.style.left = (dinoX - 112) + "px";
+    if (e.key === "ArrowLeft") {
+      dino = document.querySelector(".dino");
+      dinoX = parseInt(
+        window.getComputedStyle(dino, null).getPropertyValue("left")
+      );
+      dino.style.left = dinoX - 112 + "px";
     }
-}
+  }
+};
+
+
 
 //keeps checking whether dino has collided with obstacle or not
 setInterval(() => {
-    dino = document.querySelector(".dino");
-    gameOver = document.querySelector(".gameOver");
-    obstacle = document.querySelector(".obstacle");
+  dino = document.querySelector(".dino");
+  gameOver = document.querySelector(".gameOver");
+  obstacle = document.querySelector(".obstacle");
 
+  //gets current coordinates of dino and obstacle
 
-    //gets current coordinates of dino and obstacle
+  dx = parseInt(window.getComputedStyle(dino, null).getPropertyValue("left"));
+  dy = parseInt(window.getComputedStyle(dino, null).getPropertyValue("top"));
 
-    dx = parseInt(window.getComputedStyle(dino, null).getPropertyValue('left'));
-    dy = parseInt(window.getComputedStyle(dino, null).getPropertyValue('top'));
+  ox = parseInt(
+    window.getComputedStyle(obstacle, null).getPropertyValue("left")
+  );
+  oy = parseInt(
+    window.getComputedStyle(obstacle, null).getPropertyValue("top")
+  );
 
-    ox = parseInt(window.getComputedStyle(obstacle, null).getPropertyValue('left'));
-    oy = parseInt(window.getComputedStyle(obstacle, null).getPropertyValue('top'));
+  offsetX = Math.abs(dx - ox);
+  offsetY = Math.abs(dy - oy);
 
-    offsetX = Math.abs(dx-ox);
-    offsetY = Math.abs(dy-oy);
+  //console.log(offsetX, offsetY)
+  if (offsetX < 73 && offsetY < 52) {
+    gameOver.innerHTML = "Game Over ! - Reload to play again";
+    obstacle.classList.remove("animateObstacle");
+    audiogo.play();
+    setTimeout(() => {
+      audiogo.pause();
+      audio.pause();
+    }, 1000);
+  } else if (offsetX < 145 && cross && gameOver.style.visibility != "visible") {
+    score += 1;
+    updateScore(score);
+    cross = false;
+    setTimeout(() => {
+      cross = true;
+    }, 1000);
 
-    //console.log(offsetX, offsetY)
-    if(offsetX < 73 && offsetY < 52){
-        gameOver.innerHTML = "Game Over ! - Reload to play again"
-        obstacle.classList.remove('animateObstacle');
-        audiogo.play();
-        setTimeout(() => {
-            audiogo.pause();
-            audio.pause();
-        }, 1000)
-    } else if(offsetX < 145 && cross && gameOver.style.visibility != 'visible') {
-        score += 1;
-        updateScore(score);
-        cross = false;
-        setTimeout(() => {
-            cross = true;
-        }, 1000);
+    //increasing the speed of the obstacle
 
-        //increasing the speed of the obstacle
+    setTimeout(() => {
+      animationDuration = parseFloat(
+        window
+          .getComputedStyle(obstacle, null)
+          .getPropertyValue("animation-duration")
+      );
+      newDuration = animationDuration - 0.05;
+      obstacle.style.animationDuration = newDuration + "s";
+    }, 500);
+  }
+}, 10);
 
-        setTimeout(()=> {
-            animationDuration = parseFloat(window.getComputedStyle(obstacle, null).getPropertyValue('animation-duration'));
-            newDuration = animationDuration - 0.05;
-            obstacle.style.animationDuration = newDuration + 's';
-        }, 500)
-    }
+function updateScore(score) {
+  scoreCont.innerHTML = "Your Score: " + score;
+};
 
-
-}, 10)
-
-function updateScore(score){
-    scoreCont.innerHTML = "Your Score: " + score;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+restart.addEventListener("click", function(){
+    location.reload();
+});
 
 
 
@@ -128,8 +131,8 @@ Set dragon levels and add more obstacles
 Change the background from day to night or weather from summer to snow
 Increase the speed
 Flip the dragon face when going left
-put a start button or be like - Press any key to start
-put a restart button
+put a start button or be like - Press any key to start -> DONE
+put a restart button -> DONE
 give a better game over animation for dragon like jumping and going down the screen like mario.
 
 You can also make it multiplayer

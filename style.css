@@ -55,6 +55,29 @@ body {
   font-family: sans-serif;
 }
 
+.start {
+  position: relative;
+  top: 63px;
+  font-size: 53px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.restart{
+  font-family: sans-serif;
+  font-weight: bold;
+  width: 112px;
+  position: absolute;
+  top: 31px;
+  left:23px ;
+  color: #54212f;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background-color: transparent;
+
+}
+
 #scoreCont {
   font-family: sans-serif;
   font-weight: bold;
@@ -65,6 +88,7 @@ body {
   color: #54212f;
   padding: 10px;
   border: 2px solid black;
+  border-radius:5px ;
 }
 
 @keyframes dino {
